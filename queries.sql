@@ -1,22 +1,25 @@
--- Users table creation
+-- Users table creation with sequence for FelhasznaloID
+CREATE SEQUENCE FelhasznaloID_sequence START WITH 1 INCREMENT BY 1;
 CREATE TABLE Felhasznalok (
-    FelhasznaloID INT PRIMARY KEY,
+    FelhasznaloID INT DEFAULT NEXT VALUE FOR FelhasznaloID_sequence PRIMARY KEY,
     Nev NVARCHAR(100),
     Email NVARCHAR(100) UNIQUE,
     RegisztracioDatuma DATE
 );
 
--- Products table creation
+-- Products table creation with sequence for TermekID
+CREATE SEQUENCE TermekID_sequence START WITH 1 INCREMENT BY 1;
 CREATE TABLE Termekek (
-    TermekID INT PRIMARY KEY,
+    TermekID INT DEFAULT NEXT VALUE FOR TermekID_sequence PRIMARY KEY,
     Nev NVARCHAR(100),
     Ar MONEY,
     KeszletMennyiseg INT
 );
 
--- Orders table creation
+-- Orders table creation with sequence for RendelesID
+CREATE SEQUENCE RendelesID_sequence START WITH 1 INCREMENT BY 1;
 CREATE TABLE Rendelesek (
-    RendelesID INT PRIMARY KEY,
+    RendelesID INT DEFAULT NEXT VALUE FOR RendelesID_sequence PRIMARY KEY,
     FelhasznaloID INT FOREIGN KEY REFERENCES Felhasznalok(FelhasznaloID),
     TermekID INT FOREIGN KEY REFERENCES Termekek(TermekID),
     RendelesekSzama INT,
@@ -24,26 +27,28 @@ CREATE TABLE Rendelesek (
 );
 
 -- Insert data into the Users table
-INSERT INTO Felhasznalok (FelhasznaloID, Nev, Email, RegisztracioDatuma)
+INSERT INTO Felhasznalok (Nev, Email, RegisztracioDatuma)
 VALUES 
-    (1, 'Kovács Péter', 'kovacs.peter@example.com', '2023-05-10'),
-    (2, 'Nagy Anna', 'nagy.anna@example.com', '2023-07-15'),
-    (3, 'Kiss Gábor', 'kiss.gabor@example.com', '2023-09-20');
+    ('Kovács Péter', 'kovacs.peter@example.com', '2023-05-10'),
+    ('Nagy Anna', 'nagy.anna@example.com', '2023-07-15'),
+    ('Kiss Gábor', 'kiss.gabor@example.com', '2023-09-20');
 
 -- Insert data into the Products table
-INSERT INTO Termekek (TermekID, Nev, Ar, KeszletMennyiseg)
+INSERT INTO Termekek (Nev, Ar, KeszletMennyiseg)
 VALUES 
-    (1, 'Laptop', 120000, 10),
-    (2, 'Okostelefon', 80000, 15),
-    (3, 'Tablet', 60000, 20);
+    ('Laptop', 120000, 10),
+    ('Okostelefon', 80000, 15),
+    ('Tablet', 60000, 20);
 
 -- Insert data into the Orders table
-INSERT INTO Rendelesek (RendelesID, FelhasznaloID, TermekID, RendelesekSzama, RendelesDatuma)
+INSERT INTO Rendelesek (FelhasznaloID, TermekID, RendelesekSzama, RendelesDatuma)
 VALUES
-    (1, 1, 1, 2, '2024-02-28 10:15:00'),
-    (2, 2, 2, 1, '2024-03-01 14:30:00'),
-    (3, 3, 3, 3, '2024-03-02 09:45:00'),
-    (4, 1, 2, 3, '2024-02-28 10:15:00');
+    (1, 1, 2, '2024-02-28 10:15:00'),
+    (2, 2, 1, '2024-03-01 14:30:00'),
+    (3, 3, 3, '2024-03-02 09:45:00'),
+    (1, 2, 1, '2024-03-10 20:35:00'),
+    (1, 3, 2, '2024-03-15 12:25:00'),
+    (2, 1, 5, '2024-03-20 10:10:00');
 
 -- "All Users"
 SELECT * FROM Felhasznalok;
